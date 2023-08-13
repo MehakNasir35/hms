@@ -18,8 +18,10 @@ const Sidebar = () => {
 
   return (
     <div className="p-3">
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center justify-content-center">
+      
         <Logo />
+
         <span className="ms-auto d-lg-none">
         <Button
           close
@@ -38,7 +40,7 @@ const Sidebar = () => {
                 className={
                   location.pathname === navi.href
                     ? "text-primary nav-link py-3"
-                    : "nav-link text-secondary py-3"
+                    : "nav-link text-white py-3"
                 }
               >
                 <i className={navi.icon}></i>
