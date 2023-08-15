@@ -1,5 +1,7 @@
 import { lazy } from "react";
-import { Navigate } from "react-router-dom";
+import RoomManagement from "../views/RoomManagement.js";
+import BuildingMap from "../views/BuildingMap.js";
+import StudentInformation from "../views/StudentInformation.js";
 
 /****Layouts*****/
 const FullLayout = lazy(() => import("../layouts/FullLayout.js"));
@@ -16,8 +18,12 @@ const ThemeRoutes = [
     element: <FullLayout />,
     children: [
       { path: "/", exact: true, element: <Starter /> },
+      { path: "/roomManagement", exact: true, element: <RoomManagement /> },
+      { path: "/buildingMap", exact: true, element: <BuildingMap /> },
+      { path: "/studentInformation", exact: true, element: <StudentInformation /> },
     ],
   },
+
 ];
 
 export default ThemeRoutes;

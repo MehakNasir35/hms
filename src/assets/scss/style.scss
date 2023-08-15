@@ -4,3 +4,57 @@
 @import "~bootstrap-icons/font/bootstrap-icons.scss";
 @import "./layout/sidebar";
 @import "./layout/container";
+
+.rounded-box {
+  border-radius: 10px;
+  padding: 1px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+.badgeHostel{
+  background-color: #1c477d !important;
+}
+
+/* CustomNavPills.css */
+
+/* Remove default background, border, and padding for NavItem */
+.nav-pills-custom .nav-item {
+  background: none;
+  border: none;
+}
+
+.nav-pills-custom .nav-link.active {
+  border-bottom: 5px solid #1c477d;
+  color: #1c477d;
+  font-weight: 900;
+}
+
+/* Style for non-active links */
+.nav-pills-custom .nav-link {
+  border-bottom: 2px solid transparent; /* Add transparent bottom border for non-active links */
+  color: gray; /* Set default color for non-active links */
+  padding: 20px;
+}
+
+.themeButtons{
+  background-color: #1c477d;
+  border: #1c477d;
+}
+
+.themeFields {
+  padding: 4px !important;
+  border-radius: 8px;
+  // background-color: white;
+  box-shadow: 4px 3px rgba(139, 139, 139, 0.1);
+}
+
+th {
+  background-color: #1c477d !important;
+  color: white !important;
+}
+
+.card{
+  background-color: white;
+    box-shadow: 4px 4px 6px #beb9b9;
+    border-radius: 20px;
+}

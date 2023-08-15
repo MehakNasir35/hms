@@ -3,7 +3,9 @@
 }
 .contentArea {
   flex-grow: 1;
+  background-color: #f5f4f4;
 }
+
 .wrapper {
   max-width: 1300px;
   margin: 0 auto;
@@ -35,4 +37,8 @@
 }
 .table-borderless>:not(:first-child) {
   border-top-width: 0;
+}
+
+.navbar{
+background-color: #F5F4F4;
 }

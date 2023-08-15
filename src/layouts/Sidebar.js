@@ -8,6 +8,25 @@ const navigation = [
     href: "",
     icon: "bi bi-speedometer2",
   },
+
+  {
+    title: "Room Management",
+    href: "/roomManagement",
+    icon: "bi bi-speedometer2",
+  },
+
+  {
+    title: "Building Map",
+    href: "/buildingMap",
+    icon: "bi bi-speedometer2",
+  },
+
+  {
+    title: "Student Information",
+    href: "/studentInformation",
+    icon: "bi bi-speedometer2",
+  },
+  
 ];
 
 const Sidebar = () => {
