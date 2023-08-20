@@ -37,7 +37,7 @@ export function AddFloor(props) {
         onClose={handleClose}
         className="modall"
         >
-        <div className="custom-modal-body ">
+        <div className="custom-modal-body2 ">
         <div className="custom-modal-header">
         <Typography variant="h6" className="modalHeader">
         Add Floor

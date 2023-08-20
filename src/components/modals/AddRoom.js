@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 
 import { Modal,Typography,TextField, FormControlLabel, Checkbox } from '@material-ui/core'; // Import from @mui/material
 import '../../assets/modal.css';
-import { Button, Col } from "reactstrap";
+import { Button, Col, Row } from "reactstrap";
 import { useAddRoom } from '../../hooks/room';
 import { useServices } from '../../hooks/services';
 
@@ -11,8 +11,6 @@ export function AddRoom(props) {
 
     const {data}=useServices()
     const extraServices=data?.data
-
-    console.log(extraServices)
     
     const floor_id = props.floor_id
     
@@ -45,9 +43,7 @@ export function AddRoom(props) {
     };
     
     const addRoomm =async() => {
-        console.log(room_name,room_number,room_charges,seat_capacity,services,floor_id)
         let add = await room.mutateAsync({room_name,room_number,room_charges,seat_capacity,services,floor_id})
-        console.log(add)
         handleClose()
     }
     
@@ -91,7 +87,9 @@ export function AddRoom(props) {
         <div className="line-divider"></div>
         <div className="custom-modal-content">
         
-        <TextField
+        <Row>
+          <Col>
+          <TextField
         label="Room No."
         name={room_number}
          type='number'
@@ -100,8 +98,9 @@ export function AddRoom(props) {
         className='my-2 w-100'
         variant="outlined"
         />
-        
-        <TextField
+          </Col>
+          <Col>
+          <TextField
         label="Room Name"
         name={room_name}
         value={room_name}
@@ -109,8 +108,12 @@ export function AddRoom(props) {
         className='my-2 w-100'
         variant="outlined"
         />
-        
-        <TextField
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+          <TextField
         label="Bed Capacity"
         name={seat_capacity}
         value={seat_capacity}
@@ -119,8 +122,9 @@ export function AddRoom(props) {
         className='my-2 w-100'
         variant="outlined"
         />
-        
-        <TextField
+          </Col>
+          <Col>
+          <TextField
         label="Room Charges"
         type='number'
         name={room_charges}
@@ -129,6 +133,15 @@ export function AddRoom(props) {
         className='my-2 w-100'
         variant="outlined"
         />
+          </Col>
+        </Row>
+       
+        
+       
+        
+      
+        
+     
         
         <h6>Extra Services</h6>
         
