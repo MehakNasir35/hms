@@ -5,25 +5,42 @@ import { Link, useLocation } from "react-router-dom";
 const navigation = [
   {
     title: "Dashboard",
-    href: "",
+    href: "/home",
     icon: "bi bi-speedometer2",
   },
-
   {
     title: "Room Management",
-    href: "/roomManagement",
+    href: "roomManagement",
     icon: "bi bi-speedometer2",
   },
-
   {
     title: "Building Map",
-    href: "/buildingMap",
+    href: "buildingMap",
     icon: "bi bi-speedometer2",
   },
-
   {
     title: "Student Information",
-    href: "/studentInformation",
+    href: "studentInformation",
+    icon: "bi bi-speedometer2",
+  },
+  {
+    title: "Registration",
+    href: "registration",
+    icon: "bi bi-speedometer2",
+  },
+  {
+    title: "Expenses",
+    href: "expenses",
+    icon: "bi bi-speedometer2",
+  },
+  {
+    title: "Invoices",
+    href: "invoices",
+    icon: "bi bi-speedometer2",
+  },
+  {
+    title: "Generate Invoices",
+    href: "generateInvoice",
     icon: "bi bi-speedometer2",
   },
   

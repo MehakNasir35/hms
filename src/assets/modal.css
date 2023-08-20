@@ -1,0 +1,62 @@
+.modall{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+/* 
+  .body {
+    background-color: white; */
+    /* border: 2px solid #000; */
+    /* box-shadow: 2px 2px 1px 1px #d5d0d054;
+    padding: 20px;
+    border-radius: 14px;
+} */
+
+
+
+
+
+.custom-modal-body {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  min-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.custom-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalHeader {
+  font-size: 1.5rem;
+}
+
+.modal-close-button {
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: #aaa;
+}
+
+.line-divider {
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.custom-modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* Add any other custom styles you want */

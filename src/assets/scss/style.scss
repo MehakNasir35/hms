@@ -21,6 +21,7 @@
 .nav-pills-custom .nav-item {
   background: none;
   border: none;
+  cursor: pointer;
 }
 
 .nav-pills-custom .nav-link.active {
@@ -41,6 +42,17 @@
   border: #1c477d;
 }
 
+.closeButton{
+  background-color: white;
+  border: 1px solid #1c477d !important;
+  color: #1c477d;
+}
+
+.addRoom{
+  min-height: 160px;
+  cursor: pointer;
+}
+
 .themeFields {
   padding: 4px !important;
   border-radius: 8px;
@@ -57,4 +69,113 @@ th {
   background-color: white;
     box-shadow: 4px 4px 6px #beb9b9;
     border-radius: 20px;
+}
+
+.bed-icon{
+  font-size: 22px;
+    margin: 5px;
+}
+
+
+.themeTable{
+  border: 1px solid #e0e0e0; // Add border style
+  border-radius: 8px; // Add border radius
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); // Add box shadow
+}
+
+
+.Stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f4f4 !important;
+  width: 100%;
+}
+
+.circle-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #1c477d;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.stepperIcon {
+  font-size: 18px;
+    color: #1c477d;
+
+}
+
+.MuiStep-completed .stepperIcon {
+    color: white;
+}
+
+.MuiStep-completed .circle-icon {
+  background-color: #1c477d;
+}
+
+.step-content {
+  width: 100%;
+}
+
+.step-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.MuiStepLabel-label.MuiStepLabel-active {
+  color: rgb(28 71 125) !important;
+  font-weight: bold !important;
+}
+
+.MuiStepConnector-active .MuiStepConnector-line {
+  border-color: #1c477d;
+}
+
+.MuiStep-completed .MuiStepConnector-line {
+  border: 2px solid;
+  border-color: #1c477d;
+}
+
+.MuiStepConnector-line {
+  border: 2px solid;
+  border-color: #e2e6ea;
+}
+
+
+.uploadDiv {
+  border: 1px dashed #2B467D;
+  background: rgba(217, 217, 217, 0.35);
+  height: 200px;
+}
+
+.uploadIcon{
+  font-size: 50px;
+}
+
+.bgDiv{
+  padding: 8px;
+  border-radius: 10px;
+border: 1px solid rgba(50, 75, 126, 0.50);
+background: #FFF;
+box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.MuiInputLabel-shrink {
+  transform: translate(0, 1.5px) scale(0.75) !important;
+  transform-origin: top left;
+  margin: 1px 8px;
+}
+
+.beds-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* Additional styles for container width, padding, and margin */
+  max-width: 100%; /* Adjust as needed */
+  padding: 10px; /* Adjust as needed */
 }

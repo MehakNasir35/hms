@@ -1,39 +1,71 @@
-import React, { useState } from 'react';
-import { Nav, NavItem, NavLink } from 'reactstrap';
+import React, { useState,useEffect } from 'react';
+import { Button, Nav, NavItem, NavLink, Row,Col } from 'reactstrap';
+import { useFloors } from '../hooks/floor';
+import { Rooms } from './Rooms';
+import { AddFloor } from './modals/AddFloor';
+import { Beds } from './Beds';
 
-export function Floor() {
-  const [activeIndex, setActiveIndex] = useState(0);
+export function Floor(props) {
+  
+  const branchId = props.branchId
+  const pageName = props.pageName
+  
+  const [floorIndex, setFloorIndex] = useState(0);
+  
+  const {data} = useFloors(branchId)
+  const floors = data?.data
+ 
+  let hasFloors = true;
 
-  const handleNavLinkClick = (index) => {
-    setActiveIndex(index);
-  };
+  if (pageName === "BuildingMap" && floors?.length === 0 ) {
+    hasFloors = false;
+  }
 
+  useEffect(() => {
+    setFloorIndex(0)
+  }, [branchId]);
+  
   return (
-    <Nav className="nav-pills-custom">
-      <NavItem>
+    <>
+    
+    {hasFloors && (
+      <>
+      <div className="rounded-box my-4">
+      
+      <Row className="pt-2">
+      <Col md={10} lg={10} sm={10} xs={10}>
+      
+      <Nav className="nav-pills-custom">
+      
+      {floors?.map((floor, index) => (
+        <NavItem  key={floor.floor_id}>
+        
         <NavLink
-          onClick={() => handleNavLinkClick(0)}
-          active={activeIndex === 0}
+        onClick={() =>  setFloorIndex(floor.floor_id)}
+        active={floorIndex === floor.floor_id}
         >
-          Floor 01
+        {floor.floor_name}
         </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          onClick={() => handleNavLinkClick(1)}
-          active={activeIndex === 1}
-        >
-          Floor 02
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink
-          onClick={() => handleNavLinkClick(2)}
-          active={activeIndex === 2}
-        >
-          Floor 03
-        </NavLink>
-      </NavItem>
-    </Nav>
-  );
-}
+        </NavItem>
+        
+        ))}
+        </Nav>
+        
+        </Col>
+        <Col md={2} lg={2} sm={2} xs={2}>
+        
+        {pageName == "RoomManagement" ? <AddFloor branchId={branchId} /> : ""}
+        
+        </Col>
+        </Row>
+        
+        </div>
+        
+        {pageName == "RoomManagement" ? <Rooms floorId={floorIndex} /> : ""}
+        
+        {pageName == "BuildingMap" ? <Beds floorId={floorIndex} /> : ""}
+        </> )}
+        </>
+        );
+      }
+      

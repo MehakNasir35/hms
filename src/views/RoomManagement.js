@@ -1,8 +1,17 @@
-import { Row,Col,Button,Badge } from "reactstrap";
+import React from 'react';
+
+
+import { Row,Col,Button,Badge, } from "reactstrap";
 import { Floor } from "../components/Floor";
 import { Rooms } from "../components/Rooms";
+import { AddBuilding } from '../components/modals/AddBuilding';
+import { useBuildings } from '../hooks/building';
 
 const RoomManagement = () => {
+    
+    const { data } = useBuildings()
+    const buildings = data?.data
+    
     return (
         <>
         
@@ -11,37 +20,30 @@ const RoomManagement = () => {
         <h4> Room Management</h4>
         </Col>
         <Col>
-        <Button className="float-end themeButtons">Add Building +</Button>
+        <AddBuilding />
         </Col>
         </Row>
         
-        <p className="text-left">Building 01</p>
         
-        <h5><Badge className="px-3 badgeHostel rounded-pill" >
-        Hostel Room
-        </Badge></h5>
+        {buildings?.map((building, index) => (
+            <> 
+            <p className="text-left">{building.branch_name}</p>
+            
+            <h5><Badge className="px-3 badgeHostel rounded-pill" >
+            Hostel Room
+            </Badge></h5>
+            
+            
+            <Floor branchId={building.branch_id} pageName="RoomManagement" />
+            
+            </> 
+            ))}
+            
+            
+            
+            </>
+            );
+        };
         
-        <div className="rounded-box my-4">
+        export default RoomManagement;
         
-        <Row className="pt-2">
-        <Col>
-        
-        <Floor />
-
-        </Col>
-        <Col>
-        <Button className="float-end mt-2">Add Floor +</Button>
-        </Col>
-        </Row>
-        
-        </div>
-        
-        <Rooms />
-        
-        
-        </>
-        );
-    };
-    
-    export default RoomManagement;
-    

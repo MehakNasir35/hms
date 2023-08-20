@@ -1,0 +1,93 @@
+/* src/components/LoginPage.css */
+.login-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; 
+
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./images/loginBg.png'); 
+  background-size: cover;
+  z-index: -1;
+}
+
+.background-color{
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #2B467D;
+}
+
+.login-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(245 245 245 / 67%);
+  padding: 46px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+}
+.logo {
+  width: 100px; /* Adjust the width as needed */
+  height: auto;
+  margin-bottom: 20px; /* Add some spacing below the logo */
+}
+
+.icon-input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 16px;
+}
+
+.icon-input {
+  padding: 16px !important;
+  border-radius: 16px !important;
+  border: 0px !important;
+  font-size: 16px !important;
+  /* color: black; */
+  /* width: 500px; */
+  margin-right: -13px !important;
+  background: rgba(217, 217, 217, 0.80) !important;
+}
+
+.icon {
+  position: absolute;
+  right: 10px; /* Adjust this value to control the distance from the right corner */
+  pointer-events: none;
+}
+
+.login-btn {
+  padding: 16px;
+  border-radius: 16px;
+  border: 0px;
+  font-size: 16px;
+  color: whitesmoke;
+  /* width: 500px; */
+  margin-right: -13px;
+  background: #324B7E;
+}
+
+.fieldLogin{
+  margin: 10px !important;
+}
+
+.logoHeading {
+  color: #2B467D;
+  font-weight: 900;
+  margin-top: 8px;
+}
