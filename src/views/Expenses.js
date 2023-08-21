@@ -3,6 +3,7 @@ import { Row, Col, Button } from 'reactstrap';
 import { TextField,Table,TableRow,TableCell,TableBody,TableHead ,InputLabel,Select,FormControl,MenuItem} from '@material-ui/core'; // Import from @mui/material
 import { useBuildings } from '../hooks/building';
 import { useExpenses } from '../hooks/expenses';
+import { AddExpense } from '../components/modals/AddExpense';
 
 const Expenses = () => {
     
@@ -30,7 +31,7 @@ const Expenses = () => {
         <h4>Expenses</h4>
         </Col>
         <Col>
-        <Button className="float-end themeButtons">Add Expense +</Button>
+        <AddExpense />
         </Col>
         </Row>
         

@@ -1,47 +1,49 @@
 import { Button, Nav, NavItem } from "reactstrap";
 import Logo from "./Logo";
 import { Link, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAddressCard, faBed, faBuilding, faFileInvoice, faFileInvoiceDollar, faGauge, faInfoCircle, faUsd } from '@fortawesome/free-solid-svg-icons';
 
 const navigation = [
   {
     title: "Dashboard",
     href: "/home",
-    icon: "bi bi-speedometer2",
+    icon: faGauge,
   },
   {
     title: "Room Management",
-    href: "roomManagement",
-    icon: "bi bi-speedometer2",
+    href: "/home/roomManagement",
+    icon: faBed,
   },
   {
     title: "Building Map",
-    href: "buildingMap",
-    icon: "bi bi-speedometer2",
+    href: "/home/buildingMap",
+    icon: faBuilding,
   },
   {
     title: "Student Information",
-    href: "studentInformation",
-    icon: "bi bi-speedometer2",
+    href: "/home/studentInformation",
+    icon: faInfoCircle,
   },
   {
     title: "Registration",
-    href: "registration",
-    icon: "bi bi-speedometer2",
+    href: "/home/registration",
+    icon: faAddressCard,
   },
   {
     title: "Expenses",
-    href: "expenses",
-    icon: "bi bi-speedometer2",
+    href: "/home/expenses",
+    icon: faFileInvoiceDollar,
   },
   {
     title: "Invoices",
-    href: "invoices",
-    icon: "bi bi-speedometer2",
+    href: "/home/invoices",
+    icon: faFileInvoice,
   },
   {
     title: "Generate Invoices",
-    href: "generateInvoice",
-    icon: "bi bi-speedometer2",
+    href: "/home/generateInvoice",
+    icon: faFileInvoice,
   },
   
 ];
@@ -75,11 +77,11 @@ const Sidebar = () => {
                 to={navi.href}
                 className={
                   location.pathname === navi.href
-                    ? "text-primary nav-link py-3"
+                    ? "text-primary nav-link py-3 activeLink"
                     : "nav-link text-white py-3"
                 }
               >
-                <i className={navi.icon}></i>
+                <FontAwesomeIcon icon={navi.icon}/>
                 <span className="ms-3 d-inline-block">{navi.title}</span>
               </Link>
             </NavItem>

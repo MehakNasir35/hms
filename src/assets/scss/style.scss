@@ -5,6 +5,13 @@
 @import "./layout/sidebar";
 @import "./layout/container";
 
+.nav-link:hover, .nav-link:focus, .nav-link:active, .activeLink {
+  background: #071532 !important;
+  border-radius: 5px !important;
+  color: white !important;
+}
+
+
 .rounded-box {
   border-radius: 10px;
   padding: 1px 20px;
