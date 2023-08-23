@@ -1,0 +1,37 @@
+// actions.js
+import { UPDATE_PERSONAL_INFO } from './actionTypes';
+import { UPDATE_LOCATION_INFO } from './actionTypes';
+import { UPDATE_GUARDIAN_INFO } from './actionTypes';
+import { UPDATE_VISITOR_INFO } from './actionTypes';
+import { UPDATE_CNIC_FRONT } from './actionTypes';
+import { UPDATE_CNIC_BACK } from './actionTypes';
+
+export const updatePersonalInfo = (data) => ({
+    type: UPDATE_PERSONAL_INFO,
+    payload: data,
+});
+
+export const updateLocationInfo = (data) => ({
+    type: UPDATE_LOCATION_INFO,
+    payload: data,
+});
+
+export const updateGuardianInfo = (data) => ({
+    type: UPDATE_GUARDIAN_INFO,
+    payload: data,
+});
+
+export const updateVisitorInfo = (data) => ({
+    type: UPDATE_VISITOR_INFO,
+    payload: data,
+});
+
+export const updateCnicFront = (data) => ({
+    type: UPDATE_CNIC_FRONT,
+    payload: data,
+});
+
+export const updateCnicBack = (data) => ({
+    type: UPDATE_CNIC_BACK,
+    payload: data,
+});

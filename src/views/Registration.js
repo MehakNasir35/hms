@@ -8,6 +8,8 @@ import VisitorInfo from "../components/stepper/VisitorInfo";
 import Cnic from "../components/stepper/Cnic";
 
 import { faLocationDot, faUser, faUserPen, faIdCard } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from "react-redux";
+import { useAddStudent } from "../hooks/student";
 
 const steps = [
   { label: 'Location Info', icon: faLocationDot },
@@ -32,18 +34,47 @@ const getStepContent = (stepIndex) => {
 };
 
 const Registration = () => {
+  
+  const register = useAddStudent()
+  
   const [activeStep, setActiveStep] = useState(0);
   
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   
-  const submit=()=>{
-    
-    console.log("submit")
-  }
+  const locationInfo = useSelector((state) => state.reducers1.location_info);
+  
+  const personalInfo = useSelector((state) => state.reducers1.personal_info);
+  
+  const guardianInfo = useSelector((state) => state.reducers1.guardian_info);
+  
+  const visitorInfo = useSelector((state) => state.reducers1.visitors_info);
+  
+  const cnicFront = useSelector((state) => state.reducers1.idFrontImage);
+  
+  const cnicBack = useSelector((state) => state.reducers1.idBackImage);
+  
+  const submit=async()=>{
+    const formData = new FormData();
+    formData.append('location_info', JSON.stringify(locationInfo));
+    formData.append('personal_info', JSON.stringify(personalInfo));
+    formData.append('guardian_info', JSON.stringify(guardianInfo));
+    formData.append('visitors_info', JSON.stringify(visitorInfo));
+    if (cnicFront) {
+      formData.append('idFrontImage', cnicFront, cnicFront.name);
+    }
+  
+    if (cnicBack) {
+      formData.append('idBackImage', cnicBack, cnicBack.name);
+    }
+
+    const add = await register.mutateAsync(formData);}
   
   return (
+    
+    
+    
     <div > {/* Wrap the content in a container */}
     <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
     {steps.map((step, index) => (

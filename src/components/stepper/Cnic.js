@@ -2,8 +2,12 @@ import { Button, Card, CardBody, CardHeader, CardTitle, Col, Row, } from "reacts
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { updateCnicBack, updateCnicFront } from "./reducer/actions";
 
 const Cnic = () => {
+
+    const dispatch = useDispatch();
     
     const [cnicFront, setCnicFront] = useState(null);
     const [cnicBack, setCnicBack] = useState(null);
@@ -13,13 +17,19 @@ const Cnic = () => {
     const cnicFrontUpload = (event) => {
         const file = event.target.files[0];
         setCnicFront(file);
+         // Dispatch action to update CNIC front image
+         dispatch(updateCnicFront(file));
     };
 
     const cnicBackUpload = (event) => {
         const file = event.target.files[0];
         setCnicBack(file);
+
+        dispatch(updateCnicBack(file));
+
     };
     
+
     
     return(
         <>

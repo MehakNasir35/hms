@@ -16,3 +16,20 @@ export const useStudents = (filters) => {
                 .then((res) => res.data) 
     })
 }
+
+
+//add Student
+export const useAddStudent = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (data) => {
+            return axios
+            .post(`http://115.186.185.235:9011/hms/students/`, data,{ headers: {
+                'Content-Type': "form-data"
+        }})
+        .then((res) => res.data)
+    }, onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['students'] })
+    }
+})
+}

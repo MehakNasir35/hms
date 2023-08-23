@@ -12,10 +12,15 @@ import Expenses from './views/Expenses';
 import Invoices from './views/Invoices';
 import GenerateInvoices from './views/GenerateInvoice';
 
+import { store } from "./store";
+import { Provider } from "react-redux";
+
+
 const queryClient = new QueryClient();
 
 function App() {
   return (
+    <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
@@ -33,6 +38,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
+    </Provider>
   );
 }
 

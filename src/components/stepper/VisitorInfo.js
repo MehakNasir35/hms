@@ -1,21 +1,26 @@
 import {Table,TableRow,TableCell,TableBody,TableHead } from '@material-ui/core'; // Import from @mui/material
-import { AddBuilding } from '../modals/AddBuilding';
 import { Col, Row } from 'reactstrap';
+import { updateVisitorInfo } from './reducer/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { AddVisitor } from '../modals/AddVisitor';
 
 
 const VisitorInfo = () => {
+    const visitorInfo = useSelector((state) => state.reducers1.visitors_info);
+    console.log("visitor",visitorInfo)
+    
     return(
         <>
-
-<Row className="pt-2">
+        
+        <Row className="pt-2">
         <Col>
         <h4>Visitor Information</h4>
         </Col>
         <Col>
-        <AddBuilding />
+        <AddVisitor />
         </Col>
         </Row>
-
+        
         <Table stickyHeader aria-label="sticky table" className='mt-5 themeTable'>
         <TableHead>
         <TableRow>
@@ -34,20 +39,24 @@ const VisitorInfo = () => {
         </TableRow>
         </TableHead>
         <TableBody>
+
+        {visitorInfo?.map((visitor, index) => (
         <TableRow hover  >
         <TableCell >
-        s
+        {visitor.visitor_name}
         </TableCell>
         <TableCell >
-        s
+        {visitor.visitor_relation}
         </TableCell>
         <TableCell >
-        s
+        {visitor.visitor_identity_number}
         </TableCell>
         <TableCell >
-        s
+        {visitor.visitor_primary_contact}
         </TableCell>
         </TableRow>
+        ))}
+
         </TableBody>
         </Table>
         </>
