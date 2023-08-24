@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 
 import { Modal,Typography,TextField } from '@material-ui/core'; // Import from @mui/material
 import '../../assets/modal.css';
-import { Button, } from "reactstrap";
+import { Alert, Button, } from "reactstrap";
 import { useAddFloor } from '../../hooks/floor';
 
 
@@ -24,8 +24,21 @@ export function AddFloor(props) {
     };
     
     const addFloor =async() => {
-        let add = await floor.mutateAsync({name,branch_id})
-        handleClose()
+       
+
+        try{
+            let add = await floor.mutateAsync({name,branch_id})
+
+            if(add)
+            {
+                handleClose()
+                setName('')
+            }
+            
+        }catch(e){
+            console.error('API call error:', e);
+        }
+
     }
     
     return(
@@ -46,6 +59,9 @@ export function AddFloor(props) {
         </div>
         <div className="line-divider"></div>
         <div className="custom-modal-content">
+
+        {floor.isError && <Alert color='danger' className='my-4'>Error: {floor.error.response.data.error}</Alert>}
+
         <TextField
         label="Floor Name"
         name={name}

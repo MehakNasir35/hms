@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Typography, TextField, Grid } from '@material-ui/core';
 import '../../assets/modal.css';
-import { Button, Col, Row } from "reactstrap";
+import { Alert, Button, Col, Row } from "reactstrap";
 import { useAddBuilding } from '../../hooks/building';
 
 
@@ -20,9 +20,20 @@ export function AddBuilding() {
     };
     
     const addBuilding = async () => {
-        const add = await building.mutateAsync({ name, address });
-        console.log(add.message);
-        handleClose();
+        try{
+            const add = await building.mutateAsync({ name, address });
+            if(add)
+            {
+                handleClose();
+                setName('')
+                setAddress('')
+            }
+            
+        }catch(e){
+            console.error('API call error:', e);
+        }
+        
+        
     };
     
     return (
@@ -42,6 +53,8 @@ export function AddBuilding() {
         </div>
         <div className="line-divider"></div>
         <div className="custom-modal-content">
+        
+        {building.isError && <Alert color='danger' className='my-4'>Error: {building.error.response.data.error}</Alert>}
         
         <Row>
         <Col>

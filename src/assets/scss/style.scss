@@ -11,11 +11,10 @@
   color: white !important;
 }
 
-
 .rounded-box {
   border-radius: 10px;
   padding: 1px 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 1px 8px rgb(0 0 0 / 34%);
   background-color: white;
 }
 .badgeHostel{
@@ -185,4 +184,8 @@ box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.25);
   /* Additional styles for container width, padding, and margin */
   max-width: 100%; /* Adjust as needed */
   padding: 10px; /* Adjust as needed */
+}
+
+.themeIcons{
+  color: #1c477d;
 }

@@ -16,11 +16,11 @@ const Expenses = () => {
     const [fromDate,setFromDate]=useState()
     const [expense,setExpenses]=useState([])
 
-    const expenseData=useExpenses({'branch_id':building,'from_date':fromDate,'to_date':toDate})
+    const expenseData=useExpenses()
     
     const search =async ()=>{
-        await expenseData.refetch()
-        const expenses=expenseData?.data?.data
+        const expenses = await expenseData.mutateAsync({'branch_id':building,'from_date':fromDate,'to_date':toDate})
+        // const expenses=expenseData?.data?.data
         setExpenses(expenses)
     }
     

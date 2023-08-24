@@ -9,39 +9,53 @@ import Cnic from "../components/stepper/Cnic";
 
 import { faLocationDot, faUser, faUserPen, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from "react-redux";
-import { useAddStudent } from "../hooks/student";
+import { useAddStudent, useUpdateStudent } from "../hooks/student";
 
-const steps = [
-  { label: 'Location Info', icon: faLocationDot },
-  { label: 'Personal Info', icon: faUser },
-  { label: 'Visitor Info', icon: faUserPen },
-  { label: 'CNIC', icon: faIdCard }
-];
-
-const getStepContent = (stepIndex) => {
-  switch (stepIndex) {
-    case 0:
-    return <LocationInfo />;
-    case 1:
-    return <PersonalInfo />;
-    case 2:
-    return <VisitorInfo />;
-    case 3:
-    return <Cnic />;
-    default:
-    return '';
-  }
-};
 
 const Registration = () => {
   
   const register = useAddStudent()
+  const updateStudent = useUpdateStudent()
   
   const [activeStep, setActiveStep] = useState(0);
   
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
+  
+  const editStudent = useSelector((state) => state.reducers1.student_id);
+  console.log('edit student',editStudent)
+  
+  let steps = [
+    { label: 'Location Info', icon: faLocationDot },
+    { label: 'Personal Info', icon: faUser },
+    { label: 'Visitor Info', icon: faUserPen },
+    { label: 'CNIC', icon: faIdCard }
+  ];
+  
+  const getStepContent = (stepIndex) => {
+    switch (stepIndex) {
+      case 0:
+      return <LocationInfo />;
+      case 1:
+      return <PersonalInfo />;
+      case 2:
+      return <VisitorInfo />;
+      case 3:
+      return <Cnic />;
+      default:
+      return '';
+    }
+  };
+  
+  
+  let modifiedSteps = [...steps]; // Create a copy of the original steps array
+  
+  if (editStudent) {
+    // If editStudent has a value, keep only the first two steps
+    modifiedSteps = modifiedSteps.slice(0, 2);
+    steps = modifiedSteps
+  }
   
   const locationInfo = useSelector((state) => state.reducers1.location_info);
   
@@ -55,25 +69,60 @@ const Registration = () => {
   
   const cnicBack = useSelector((state) => state.reducers1.idBackImage);
   
-  const submit=async()=>{
-    const formData = new FormData();
-    formData.append('location_info', JSON.stringify(locationInfo));
-    formData.append('personal_info', JSON.stringify(personalInfo));
-    formData.append('guardian_info', JSON.stringify(guardianInfo));
-    formData.append('visitors_info', JSON.stringify(visitorInfo));
-    if (cnicFront) {
-      formData.append('idFrontImage', cnicFront, cnicFront.name);
-    }
-  
-    if (cnicBack) {
-      formData.append('idBackImage', cnicBack, cnicBack.name);
-    }
+  const update=async ()=>{
+    try {
 
-    const add = await register.mutateAsync(formData);}
+      const formData = new FormData();
+      formData.append('location_info', JSON.stringify(locationInfo));
+      formData.append('personal_info', JSON.stringify(personalInfo));
+      formData.append('student_id',editStudent)
+
+      
+      const uStudent = await updateStudent.mutateAsync(formData);
+      if (uStudent.isSuccess) {
+        // Reset the form or perform any other actions
+        setActiveStep(0);
+      } else {
+        console.log("Something went wrong during the mutation");
+      }
+    } catch (error) {
+      console.error("An error occurred during the mutation:", error);
+      // Handle the error, show an error message, etc.
+    }
+  }
+  
+  const submit=async()=>{
+    try {
+      const formData = new FormData();
+      formData.append('location_info', JSON.stringify(locationInfo));
+      formData.append('personal_info', JSON.stringify(personalInfo));
+      formData.append('guardian_info', JSON.stringify(guardianInfo));
+      formData.append('visitors_info', JSON.stringify(visitorInfo));
+      
+      if (cnicFront) {
+        formData.append('idFrontImage', cnicFront, cnicFront.name);
+      }
+      
+      if (cnicBack) {
+        formData.append('idBackImage', cnicBack, cnicBack.name);
+      }
+      
+      const add = await register.mutateAsync(formData);
+      
+      if (add.isSuccess) {
+        // Reset the form or perform any other actions
+        setActiveStep(0);
+      } else {
+        console.log("Something went wrong during the mutation");
+      }
+    } catch (error) {
+      console.error("An error occurred during the mutation:", error);
+      // Handle the error, show an error message, etc.
+    }
+    
+  }
   
   return (
-    
-    
     
     <div > {/* Wrap the content in a container */}
     <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
@@ -94,14 +143,22 @@ const Registration = () => {
       {activeStep >= steps.length-1 ? ' ' : <Button className="my-3 themeButtons" variant="contained" color="primary" onClick={handleNext}>
       Next  </Button>} 
       
-      {activeStep === steps.length - 1 ? <Button className="my-3 themeButtons" disabled={activeStep === steps.length} variant="contained" color="primary" onClick={submit}>Finish
-      </Button> : ' '}
+      {activeStep === steps.length - 1 && (
+        <Button
+        className="my-3 themeButtons"
+        variant="contained"
+        color="primary"
+        onClick={editStudent ? update :submit}
+        >
+        {editStudent ? 'Update' : 'Submit'}
+        </Button>
+        )}
+        
+        </div>
+        </div>
+        </div>
+        );
+      }
       
-      </div>
-      </div>
-      </div>
-      );
-    }
-    
-    export default Registration;
-    
+      export default Registration;
+      

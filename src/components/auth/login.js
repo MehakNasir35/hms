@@ -3,6 +3,7 @@ import { TextField,InputAdornment ,FormControl,InputLabel,IconButton,Icon,Filled
 import React,{useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from '../../hooks/auth';
+import { Alert } from 'reactstrap';
 
 export function Login() {
   const navigate = useNavigate()
@@ -17,9 +18,18 @@ export function Login() {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   
   const handleClick = async() => {
+
+    try {
     const loggedIn = await signIn.mutateAsync({ email, password })
     if (loggedIn)
-    navigate('/home');
+    {
+      localStorage.setItem('token', loggedIn?.data?.token);
+      navigate('/home');
+    }
+  }catch (error) {
+    console.error('API call error:', error);
+  }
+
   };
   
   return(
@@ -43,6 +53,9 @@ export function Login() {
     </svg>
     <h6 className='logoHeading'>Explore & Connect</h6>
     </center>
+
+
+    {signIn.isError && <Alert color='danger' className='my-4'>Error: {signIn.error.response.data.error}</Alert>}
     
     <TextField
     label="Email"

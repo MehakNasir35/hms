@@ -16,11 +16,11 @@ const Invoices = () => {
 
     const [invoice,setInvoices]=useState([])
 
-    const invoiceData=useInvoices({'branch_id':building,'from_date':fromDate,'to_date':toDate,identity_number})
+    const invoiceData=useInvoices()
 
     const search =async ()=>{
-        await invoiceData.refetch()
-        const invoices=invoiceData?.data?.invoices
+        const invoices = await invoiceData.mutateAsync({'branch_id':building,'from_date':fromDate,'to_date':toDate,identity_number})
+        // const invoices=invoiceData?.data?.invoices
         setInvoices(invoices)
     }
     

@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 
 import { Modal,Typography,TextField,FormControl,InputLabel,Select,MenuItem, FormControlLabel, Checkbox, RadioGroup, Radio } from '@material-ui/core'; // Import from @mui/material
 import '../../assets/modal.css';
-import { Button, Col, Row, } from "reactstrap";
+import { Alert, Button, Col, Row, } from "reactstrap";
 import { useAddExpense, useExpensesTypes } from '../../hooks/expenses';
 import { useBuildings } from '../../hooks/building';
 
@@ -34,8 +34,24 @@ export function AddExpense() {
     };
     
     const addExpense =async() => {
-        await expense.mutateAsync({'branch_id':building,'expense_type':selectedExpenseType,'expense_sub_type':selectedExpenseSubType,'expense_detail':detail,charges})
-        handleClose()
+      
+
+        try{
+            const add =await expense.mutateAsync({'branch_id':building,'expense_type':selectedExpenseType,'expense_sub_type':selectedExpenseSubType,'expense_detail':detail,charges})
+
+            if(add)
+            {
+                handleClose()
+                setBuilding('')
+                setCharges('')
+                setDetails('')
+                setSelectedExpenseType(0)
+                setSelectedExpenseSubType('')
+            }
+            
+        }catch(e){
+            console.error('API call error:', e);
+        }
     }
     
     const handleExpenseTypeChange = async(event) => {
@@ -67,6 +83,9 @@ export function AddExpense() {
         </div>
         <div className="line-divider"></div>
         <div className="custom-modal-content">
+
+        {expense.isError && <Alert color='danger' className='my-4'>Error: {expense.error.response.data.error}</Alert>}
+
         <Row>
         <Col>
         <FormControl
@@ -115,8 +134,6 @@ export function AddExpense() {
             
             <h6>Expense Type</h6>
             
-            {selectedExpenseType}
-            
             <div  className='d-flex'>
             <RadioGroup
             value={selectedExpenseType}
@@ -135,47 +152,54 @@ export function AddExpense() {
                 </RadioGroup>
                 
                 </div>
+
+
                 
-                <h6 className='mt-4'>Expense Sub-Type</h6>
-                
-                <div className='d-flex'>
-                
-                <RadioGroup
-                value={selectedExpenseSubType}
-                onChange={handleExpenseSubTypeChange}
-                >
-                <FormControlLabel
-                value="Internet"
-                control={<Radio />}
-                label="Internet"
-                />
-                <FormControlLabel
-                value="Electricity"
-                control={<Radio />}
-                label="Electricity"
-                />
-                <FormControlLabel
-                value="Gas"
-                control={<Radio />}
-                label="Gas"
-                />
-                </RadioGroup>
-                
-                </div>
-                
-                
-                </Col>
-                </Row>
-                
-                <div className="button-group">
-                <Button onClick={handleClose} className='closeButton'>Close</Button>
-                <Button onClick={addExpense} className="themeButtons">Add Expense</Button>
-                </div>
-                </div>
-                </div>
-                </Modal>
-                
-                </>
-                )
-                
-            }
+                {selectedExpenseType === '2' && (
+                    <>
+                    <h6 className='mt-4'>Expense Sub-Type</h6>
+                    
+                    <div className='d-flex'>
+                    
+                    <RadioGroup
+                    disabled={selectedExpenseType != 2}
+                    value={selectedExpenseSubType}
+                    onChange={handleExpenseSubTypeChange}
+                    >
+                    <FormControlLabel
+                    value="Internet"
+                    control={<Radio />}
+                    label="Internet"
+                    />
+                    <FormControlLabel
+                    value="Electricity"
+                    control={<Radio />}
+                    label="Electricity"
+                    />
+                    <FormControlLabel
+                    value="Gas"
+                    control={<Radio />}
+                    label="Gas"
+                    />
+                    </RadioGroup>
+                    
+                    </div></>
+                    )}
+                    
+                    
+                    
+                    </Col>
+                    </Row>
+                    
+                    <div className="button-group">
+                    <Button onClick={handleClose} className='closeButton'>Close</Button>
+                    <Button onClick={addExpense} className="themeButtons">Add Expense</Button>
+                    </div>
+                    </div>
+                    </div>
+                    </Modal>
+                    
+                    </>
+                    )
+                    
+                }

@@ -4,8 +4,10 @@ import { UPDATE_GUARDIAN_INFO } from './actionTypes';
 import { UPDATE_VISITOR_INFO } from './actionTypes';
 import { UPDATE_CNIC_FRONT } from './actionTypes';
 import { UPDATE_CNIC_BACK } from './actionTypes';
+import { UPDATE_STUDENT_ID } from './actionTypes';
 
 const initialState = {
+    student_id:0,
     location_info: {
         branch_id:'',
         floor_id:'',
@@ -33,6 +35,11 @@ const initialState = {
 
 export default function reducer1(state = initialState, action) {
     switch (action.type) {
+        case UPDATE_STUDENT_ID:
+        return {
+            ...state,
+            student_id: action.payload
+        };
         case UPDATE_LOCATION_INFO:
         return {
             ...state,

@@ -9,11 +9,24 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 //get rooms
 export const useRooms= (floor_id) => {
     return useQuery({
-        queryKey: ['room',floor_id],
+        queryKey: ['rooms',floor_id],
         queryFn: () => 
             axios
                 .get(`http://115.186.185.235:9011/hms/rooms/`,{ params: {floor_id} })
                 .then((res) => res.data) 
+    })
+}
+
+
+//get room
+export const useRoom= (room_id) => {
+    return useQuery({
+        queryKey: ['room',room_id],
+        queryFn: () => 
+            axios
+                .get(`http://115.186.185.235:9011/hms/rooms/details/`,{ params: {room_id} })
+                .then((res) => res.data) 
+
     })
 }
 
@@ -28,7 +41,7 @@ export const useAddRoom = () => {
         }})
         .then((res) => res.data)
     }, onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: ['room'] })
+        queryClient.invalidateQueries({ queryKey: ['rooms'] })
     }
 })
 }

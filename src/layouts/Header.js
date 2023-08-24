@@ -10,18 +10,30 @@ import {
   Button,
 } from "reactstrap";
 import user1 from "../assets/images/users/user1.jpg";
+import {  useNavigate } from "react-router-dom";
 
 const Header = () => {
+
+  const navigate = useNavigate()
+
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
+  
   const Handletoggle = () => {
     setIsOpen(!isOpen);
   };
+
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+  
+  const Logout = () =>{
+    localStorage.removeItem('token');
+    navigate('/');
+  }
+
   return (
     <Navbar expand="md" className="border-bottom">
       <div className="d-flex align-items-center">
@@ -65,7 +77,7 @@ const Header = () => {
             ></img>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem>Logout</DropdownItem>
+            <DropdownItem onClick={Logout}> Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </Collapse>

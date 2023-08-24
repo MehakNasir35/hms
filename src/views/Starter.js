@@ -1,8 +1,10 @@
 import React,{useState} from 'react';
-import { Row, Col,Button } from 'reactstrap';
+import { Row, Col,Button, Alert } from 'reactstrap';
 import { CardContent,Typography,TextField ,InputLabel,Select,FormControl,MenuItem} from '@material-ui/core'; // Import from @mui/material
 import { useBuildings } from '../hooks/building';
 import { useCounts } from '../hooks/counts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDoorOpen, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 const Starter = () => {
   
@@ -21,28 +23,48 @@ const Starter = () => {
   const [invoices,setInvoice]=useState('0')
   const [balance,setBalance]=useState('0')
   
+  const [error,setError]=useState('')
+  const [loading,setLoading]=useState(false)
+  
   
   //react query hook
   const counts = useCounts({'branch_id':building,'from_date':fromDate,'to_date':toDate})
+
+  const search = async () => {
+    setLoading(true)
   
-  const search =async ()=>{
-    await counts.refetch()
-    const count=counts?.data
-    setStudentCount(count?.data?.students)
-    setRoomCount(count?.data?.rooms)
-    setSeatCount(count?.data?.seats)
-    setExpense(count?.data?.expense)
-    setIncome(count?.data?.income)
-    setInvoice(count?.data?.unpaid_invoices)
-    setBalance(count?.data?.balanced_amount)
-  }
+    let result; // Declare result inside the function
+    try {
+      result = await counts.refetch();
+
   
+      if (result.isError) {
+        setError(result.error.response.data.error);
+      } else {
+        const count = result.data;
+        setStudentCount(count?.data?.students);
+        setRoomCount(count?.data?.rooms);
+        setSeatCount(count?.data?.seats);
+        setExpense(count?.data?.expense);
+        setIncome(count?.data?.income);
+        setInvoice(count?.data?.unpaid_invoices);
+        setBalance(count?.data?.balanced_amount);
+        setError(null);
+      }
+    } catch (error) {
+      console.error('API call error:', error);
+      setError('An error occurred while fetching data.');
+    }
+  };
   return (
     
     <>
+
+    {(loading && counts?.isLoading) && <Alert color='primary' className='my-4'>Fetching Data</Alert> }
+    {error && <Alert color='danger' className='my-4'>Error: {error}</Alert>}
     
     <Row>
-   
+    
     <Col md={3} sm={3} lg={3}>
     <TextField
     label="Select From Date"
@@ -102,16 +124,7 @@ const Starter = () => {
       <CardContent className='card'>
       
       <Typography variant="h5" component="div">
-      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
-      <path d="M9.61035 30.2778C9.99306 28.8017 11.1412 25.1111 16.4992 25.1111C21.8572 25.1111 23.0055 28.8017 23.3881 30.2778" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M16.5001 23.3889C18.4024 23.3889 19.9446 21.8468 19.9446 19.9444C19.9446 18.0421 18.4024 16.5 16.5001 16.5C14.5978 16.5 13.0557 18.0421 13.0557 19.9444C13.0557 21.8468 14.5978 23.3889 16.5001 23.3889Z" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M11.333 9.61108C11.6201 9.11902 12.4812 7.88885 16.4997 7.88885C20.5181 7.88885 21.3792 9.11902 21.6663 9.61108" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M16.5001 7.88889C18.4024 7.88889 19.9446 6.34676 19.9446 4.44444C19.9446 2.54213 18.4024 1 16.5001 1C14.5978 1 13.0557 2.54213 13.0557 4.44444C13.0557 6.34676 14.5978 7.88889 16.5001 7.88889Z" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M1 18.2222C1.33487 17.2381 2.33951 14.7778 7.02778 14.7778C11.716 14.7778 12.7207 17.2381 13.0556 18.2222" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M7.88878 13.0555C9.79109 13.0555 11.3332 11.5134 11.3332 9.61107C11.3332 7.70876 9.79109 6.16663 7.88878 6.16663C5.98647 6.16663 4.44434 7.70876 4.44434 9.61107C4.44434 11.5134 5.98647 13.0555 7.88878 13.0555Z" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M19.9443 18.2222C20.2791 17.2381 21.2839 14.7778 25.9721 14.7778C30.6603 14.7778 31.6651 17.2381 31.9999 18.2222" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M25.1105 13.0555C27.0128 13.0555 28.5549 11.5134 28.5549 9.61107C28.5549 7.70876 27.0128 6.16663 25.1105 6.16663C23.2081 6.16663 21.666 7.70876 21.666 9.61107C21.666 11.5134 23.2081 13.0555 25.1105 13.0555Z" stroke="#2B467D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <FontAwesomeIcon icon={faUsers} className='themeIcons'/>
       </Typography>
       <Typography sx={{ mb: 1.5 }} color="text.secondary" className='mt-3'>
       No of Students
@@ -125,9 +138,7 @@ const Starter = () => {
       <CardContent className='card'>
       
       <Typography variant="h5" component="div">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path d="M17.1111 4.66667V28H0V24.8889H3.11111V0H17.1111V1.55556H24.8889V24.8889H28V28H21.7778V4.66667H17.1111ZM10.8889 12.4444V15.5556H14V12.4444H10.8889Z" fill="#2B467D"/>
-      </svg>
+      <FontAwesomeIcon icon={faDoorOpen} className='themeIcons'/>
       </Typography>
       <Typography sx={{ mb: 1.5 }} color="text.secondary" className='mt-3'>
       No of Rooms

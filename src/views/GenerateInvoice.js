@@ -3,6 +3,8 @@ import { Row, Col, Button } from 'reactstrap';
 import { TextField,Table,TableRow,TableCell,TableBody,TableHead ,InputLabel,Select,FormControl,MenuItem} from '@material-ui/core'; // Import from @mui/material
 import { useBuildings } from '../hooks/building';
 import { useGenerateInvoices } from '../hooks/invoice';
+import { Generate } from '../components/modals/Generate';
+import { Pay } from '../components/modals/Pay';
 
 const GenerateInvoices = () => {
     
@@ -15,10 +17,10 @@ const GenerateInvoices = () => {
     
     const [invoice,setInvoices]=useState([])
     
-    const invoiceData=useGenerateInvoices({'branch_id':building,'from_date':fromDate,'to_date':toDate})
-    
+    const invoiceData = useGenerateInvoices({'branch_id': building, 'from_date': fromDate, 'to_date': toDate});
+  
     const search =async ()=>{
-        await invoiceData.refetch()
+     invoiceData.refetch();
         const invoices=invoiceData?.data
         setInvoices(invoices)
     }
@@ -129,21 +131,9 @@ const GenerateInvoices = () => {
                 {invoice.invoice_info[0]?.invoice_status}
                 </TableCell>
                 <TableCell  className='text-center' >
-                
-                <Button
-                disabled={invoice.invoice_info.length === 0}
-                color={invoice.invoice_info.length === 0 ? 'secondary':'success'}
-                >
-                Generate
-                </Button>
-                
-                <Button
-                disabled={invoice.invoice_info.length === 0 || invoice.invoice_info[0]?.invoice_status === 'Paid'}
-                color={invoice.invoice_info.length === 0 || invoice.invoice_info[0]?.invoice_status === 'Paid' ? 'secondary' : 'danger'}
-                className='mx-2'
-                >
-                Pay
-                </Button>
+
+                <Generate info={invoice}/>
+                <Pay info={invoice}/>
                 
                 </TableCell>
                 </TableRow>
