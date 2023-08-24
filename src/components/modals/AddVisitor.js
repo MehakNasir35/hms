@@ -4,12 +4,12 @@ import { Modal,Typography,TextField } from '@material-ui/core'; // Import from @
 import '../../assets/modal.css';
 import { Button, Col, Row, } from "reactstrap";
 import { updateVisitorInfo } from '../stepper/reducer/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 export function AddVisitor() {
     const dispatch = useDispatch();
-    
+        
     const [modalOpen, setModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [relation, setRelation] = useState('');

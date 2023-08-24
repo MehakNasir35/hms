@@ -11,7 +11,8 @@ const PersonalInfo = () => {
   const editStudent = useSelector((state) => state.reducers1.student_id);
 
   const personalInfo = useSelector((state) => state.reducers1.personal_info);
-    console.log(personalInfo)
+
+  const guardianInfo = useSelector((state) => state.reducers1.guardian_info);
   
   const handlePersonalInfoChange = (field, value) => {
     // Create an object with the field you want to update
@@ -128,6 +129,7 @@ const PersonalInfo = () => {
       label="Guardian Name"
       id="outlined-start-adornment"
       className='m-2 w-100'
+      value={guardianInfo.guardian_name}
       onChange={(e) => handleGuardianInfoChange('guardian_name', e.target.value)}
       variant="outlined"
       />
@@ -138,6 +140,7 @@ const PersonalInfo = () => {
       id="outlined-start-adornment"
       className='m-2 w-100'
       variant="outlined"
+      value={guardianInfo.guardian_relation}
       onChange={(e) => handleGuardianInfoChange('guardian_relation', e.target.value)}
       />
       </Col>
@@ -149,6 +152,7 @@ const PersonalInfo = () => {
       label="Guardian CNIC"
       id="outlined-start-adornment"
       className='m-2 w-100'
+      value={guardianInfo.guardian_identity_number}
       variant="outlined"
       onChange={(e) => handleGuardianInfoChange('guardian_identity_number', e.target.value)}
       />
@@ -158,6 +162,7 @@ const PersonalInfo = () => {
       label="Guardian Contact No."
       id="outlined-start-adornment"
       className='m-2 w-100'
+      value={guardianInfo.guardian_primary_contact}
       variant="outlined"
       onChange={(e) => handleGuardianInfoChange('guardian_primary_contact', e.target.value)}
       />

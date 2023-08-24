@@ -10,6 +10,7 @@ import Cnic from "../components/stepper/Cnic";
 import { faLocationDot, faUser, faUserPen, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from "react-redux";
 import { useAddStudent, useUpdateStudent } from "../hooks/student";
+import { Alert } from "reactstrap";
 
 
 const Registration = () => {
@@ -21,6 +22,10 @@ const Registration = () => {
   
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   
   const editStudent = useSelector((state) => state.reducers1.student_id);
@@ -126,6 +131,7 @@ const Registration = () => {
     
     <div > {/* Wrap the content in a container */}
     <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
+
     {steps.map((step, index) => (
       <Step key={step.label}>
       <StepLabel icon={
@@ -137,15 +143,23 @@ const Registration = () => {
       ))}
       </Stepper>
       <div className="step-content">
+
+      {register.isError && <Alert color='danger' className='my-4'>Error: {register.error.response.data.error}</Alert>}
+
       {getStepContent(activeStep)}
       <div className="step-buttons float-end">
+
+      {activeStep > 0 ?  <Button className="my-3 themeButtons" variant="contained" color="primary" onClick={handleBack}>
+      Back  </Button> : ' '} 
       
-      {activeStep >= steps.length-1 ? ' ' : <Button className="my-3 themeButtons" variant="contained" color="primary" onClick={handleNext}>
+      {activeStep >= steps.length-1 ? ' ' : <Button className="m-3 themeButtons" variant="contained" color="primary" onClick={handleNext}>
       Next  </Button>} 
+
+      
       
       {activeStep === steps.length - 1 && (
         <Button
-        className="my-3 themeButtons"
+        className="m-3 themeButtons"
         variant="contained"
         color="primary"
         onClick={editStudent ? update :submit}

@@ -133,7 +133,7 @@ const LocationInfo = () => {
                     <em>None</em>
                     </MenuItem>
                     {filteredBeds?.map((bed, index) => (
-                        <MenuItem value={bed.bed_id}>{bed.bed_id}   -   {locationInfo.seat_id}</MenuItem>
+                        <MenuItem value={bed.bed_id}>{bed.bed_id} </MenuItem>
                         ))}
                         </Select>
                         </FormControl>
