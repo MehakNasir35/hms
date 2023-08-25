@@ -58,6 +58,7 @@ const PersonalInfo = () => {
     <Col sm={6} lg={6} md={6} xs={6}>
     <TextField
     label="CNIC"
+    disabled={editStudent}
     id="outlined-start-adornment"
     className='m-2 w-100'
     value={personalInfo.identity_number}

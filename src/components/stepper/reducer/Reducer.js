@@ -5,6 +5,7 @@ import { UPDATE_VISITOR_INFO } from './actionTypes';
 import { UPDATE_CNIC_FRONT } from './actionTypes';
 import { UPDATE_CNIC_BACK } from './actionTypes';
 import { UPDATE_STUDENT_ID } from './actionTypes';
+import { RESET_STATE } from './actionTypes';
 
 const initialState = {
     student_id:0,
@@ -65,20 +66,22 @@ export default function reducer1(state = initialState, action) {
             }
         };
         case UPDATE_VISITOR_INFO:
-            return {
-                ...state,
-                visitors_info: [...state.visitors_info, action.payload],
-            };
+        return {
+            ...state,
+            visitors_info: [...state.visitors_info, action.payload],
+        };
         case UPDATE_CNIC_FRONT:
         return {
             ...state,
             idFrontImage:action.payload
         };
         case UPDATE_CNIC_BACK:
-            return {
-                ...state,
-                idBackImage:action.payload
-            };
+        return {
+            ...state,
+            idBackImage:action.payload
+        };
+        case RESET_STATE:
+            return initialState; 
         default:
         return state;
     }

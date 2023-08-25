@@ -8,12 +8,15 @@ import VisitorInfo from "../components/stepper/VisitorInfo";
 import Cnic from "../components/stepper/Cnic";
 
 import { faLocationDot, faUser, faUserPen, faIdCard } from '@fortawesome/free-solid-svg-icons';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAddStudent, useUpdateStudent } from "../hooks/student";
 import { Alert } from "reactstrap";
+import { resetState } from "../components/stepper/reducer/actions";
 
 
 const Registration = () => {
+
+  const dispatch = useDispatch()
   
   const register = useAddStudent()
   const updateStudent = useUpdateStudent()
@@ -23,7 +26,7 @@ const Registration = () => {
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
+  
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -76,17 +79,22 @@ const Registration = () => {
   
   const update=async ()=>{
     try {
-
-      const formData = new FormData();
-      formData.append('location_info', JSON.stringify(locationInfo));
-      formData.append('personal_info', JSON.stringify(personalInfo));
-      formData.append('student_id',editStudent)
-
       
-      const uStudent = await updateStudent.mutateAsync(formData);
-      if (uStudent.isSuccess) {
+      const personal_info={
+        'student_name':personalInfo.student_name,
+        'primary_contact':personalInfo.primary_contact,
+        'designation':personalInfo.designation,
+        'emergency_contact_number':personalInfo.emergency_contact_number,
+        
+      }
+      
+      const uStudent = await updateStudent.mutateAsync({'location_info':locationInfo,personal_info,'student_id':editStudent});
+      if (uStudent) {
+        dispatch(resetState());
+
         // Reset the form or perform any other actions
         setActiveStep(0);
+
       } else {
         console.log("Something went wrong during the mutation");
       }
@@ -113,10 +121,13 @@ const Registration = () => {
       }
       
       const add = await register.mutateAsync(formData);
+
       
-      if (add.isSuccess) {
+      if (add) {
         // Reset the form or perform any other actions
         setActiveStep(0);
+        dispatch(resetState());
+
       } else {
         console.log("Something went wrong during the mutation");
       }
@@ -131,7 +142,7 @@ const Registration = () => {
     
     <div > {/* Wrap the content in a container */}
     <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
-
+    
     {steps.map((step, index) => (
       <Step key={step.label}>
       <StepLabel icon={
@@ -143,18 +154,18 @@ const Registration = () => {
       ))}
       </Stepper>
       <div className="step-content">
-
+      
       {register.isError && <Alert color='danger' className='my-4'>Error: {register.error.response.data.error}</Alert>}
-
+      
       {getStepContent(activeStep)}
       <div className="step-buttons float-end">
-
+      
       {activeStep > 0 ?  <Button className="my-3 themeButtons" variant="contained" color="primary" onClick={handleBack}>
       Back  </Button> : ' '} 
       
       {activeStep >= steps.length-1 ? ' ' : <Button className="m-3 themeButtons" variant="contained" color="primary" onClick={handleNext}>
       Next  </Button>} 
-
+      
       
       
       {activeStep === steps.length - 1 && (

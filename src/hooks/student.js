@@ -26,7 +26,7 @@ export const useStudents = () => {
             .get(`http://115.186.185.235:9011/hms/students/`, {params:filters},{ headers: {
                 'Content-Type': "form-data"
         }})
-        .then((res) => res.data.data.students)
+        .then((res) => res.data.data)
     },onSuccess: (result) => {
         // Replace optimistic todo in the todos list with the result
         queryClient.setQueryData(['students'], result )
@@ -62,7 +62,7 @@ export const useUpdateStudent = () => {
         mutationFn: (data) => {
             return axios
             .put(`http://115.186.185.235:9011/hms/students/`, data,{ headers: {
-                'Content-Type': "form-data"
+                'Content-Type': 'application/json'
         }})
         .then((res) => res.data)
     }, onSettled: () => {
