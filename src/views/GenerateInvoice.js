@@ -1,15 +1,21 @@
 import React,{useState} from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col, Button, Alert } from 'reactstrap';
 import { TextField,Table,TableRow,TableCell,TableBody,TableHead ,InputLabel,Select,FormControl,MenuItem} from '@material-ui/core'; // Import from @mui/material
 import { useBuildings } from '../hooks/building';
 import { useGenerateInvoices } from '../hooks/invoice';
 import { Generate } from '../components/modals/Generate';
 import { Pay } from '../components/modals/Pay';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const GenerateInvoices = () => {
     
+    const [currentPage, setCurrentPage] = useState(1);
+    const invoicePerPage = 10; // Adjust this number as needed
+    
     const { data } = useBuildings()
     const buildings = data?.data
+    const [error,setError]=useState(false)
     
     const [building,setBuilding]=useState()
     const [toDate,setToDate]=useState()
@@ -18,15 +24,37 @@ const GenerateInvoices = () => {
     const [invoice,setInvoices]=useState([])
     
     const invoiceData = useGenerateInvoices({'branch_id': building, 'from_date': fromDate, 'to_date': toDate});
-  
+    
     const search =async ()=>{
-     invoiceData.refetch();
-        const invoices=invoiceData?.data
-        setInvoices(invoices)
+        
+        try{
+            setError(false)
+            invoiceData.refetch();
+            const invoices=invoiceData?.data
+            setInvoices(invoices)
+            setCurrentPage(1)
+        }catch(error){
+            setError(true)
+            console.error('Error fetching data:', error);
+        }
+        
+        
     }
+    
+    
+    // Calculate the index range for the current page
+    const indexOfLastInvoice = currentPage * invoicePerPage;
+    const indexOfFirstInvoice = indexOfLastInvoice - invoicePerPage;
+    const invoicesToShow = invoice.slice(indexOfFirstInvoice, indexOfLastInvoice);
+    
+    // Pagination controls
+    const totalPages = Math.ceil(invoice.length / invoicePerPage);
     
     return (
         <>
+        
+        {error && <Alert color="danger">{invoiceData.error.response.data.error}</Alert>}
+        
         <Row className="pt-2">
         <h4>Invoices</h4>
         </Row>
@@ -112,7 +140,7 @@ const GenerateInvoices = () => {
             </TableHead>
             <TableBody>
             
-            {invoice?.map((invoice, index) => (
+            {invoicesToShow?.map((invoice, index) => (
                 <TableRow hover  >
                 
                 <TableCell >
@@ -131,7 +159,7 @@ const GenerateInvoices = () => {
                 {invoice.invoice_info[0]?.invoice_status}
                 </TableCell>
                 <TableCell  className='text-center' >
-
+                
                 <Generate info={invoice}/>
                 <Pay info={invoice}/>
                 
@@ -141,6 +169,21 @@ const GenerateInvoices = () => {
                 
                 </TableBody>
                 </Table>
+                
+                
+                {/* Centered pagination controls */}
+                <div className="pagination-container">
+                <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+                </Button>
+                <span className="page-number">{currentPage}</span>
+                <Button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={indexOfLastInvoice >= invoice.length}
+                >
+                <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+                </div>
                 
                 </>
                 );

@@ -1,17 +1,20 @@
 import React , {useState} from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col, Button, Alert } from 'reactstrap';
 import { TextField,Table,TableRow,TableCell,TableBody,TableHead,InputLabel,Select,FormControl,MenuItem } from '@material-ui/core'; // Import from @mui/material
 import { useStudents } from '../hooks/student';
 
 import { useBuildings } from '../hooks/building';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare , faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 import { updateLocationInfo, updatePersonalInfo, updateStudentId } from '../components/stepper/reducer/actions';
 import { useNavigate } from 'react-router-dom';
 
 const StudentInformation = () => {
-
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 10; // Adjust this number as needed
+  
   const navigate= useNavigate()
   
   const dispatch = useDispatch();
@@ -22,42 +25,64 @@ const StudentInformation = () => {
   const [cnic,setCnic]=useState('')
   const [status,setStatus]=useState('')
   const [students,setStudents]=useState([])
+  const [error,setError]=useState(false)
   
   const list = useStudents()
   
-  const search =async () =>{
+  const search = async () => {
     try {
-      const data = await list.mutateAsync({'branch_id':building,'identity_number':cnic,status});
+      setError(false)
       
-      setStudents(data);
+      const response = await list.mutateAsync({
+        branch_id: building,
+        identity_number: cnic,
+        status,
+      });
+      
+      if(response)
+      setStudents(response?.students); // Set the students array
+      setCurrentPage(1)
+      
     } catch (error) {
+      setError(true)
       console.error('Error fetching data:', error);
     }
-  }
+  };
   
   const Edit=(student)=>{
-  
+    
     dispatch(updateStudentId(student.student_id));
-
+    
     dispatch(updateLocationInfo(student.location_info));
-
+    
     const personal_info ={
       student_name:student.student_name,
       identity_number:student.identity_number,
       primary_contact:student.primary_contact,
       designation:student.designation,
       emergency_contact_number:student.emergency_contact
-  }
-
-  dispatch(updatePersonalInfo(personal_info));
-
+    }
+    
+    dispatch(updatePersonalInfo(personal_info));
+    
     navigate('/home/registration')
-
+    
   }
+  
+  // Calculate the index range for the current page
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const studentsToShow = students.slice(indexOfFirstStudent, indexOfLastStudent);
+  
+  // Pagination controls
+  const totalPages = Math.ceil(students.length / studentsPerPage);
   
   return (
     <>
+    
     {list.isLoading && <p>Loading Data...</p>}
+    {error && <Alert color="danger">{list.error.response.data.error}</Alert>}
+    
     <Row className="pt-2">
     <Col>
     <h4>Student Information</h4>
@@ -145,7 +170,7 @@ const StudentInformation = () => {
       </TableHead>
       <TableBody>
       
-      {students?.map((student, index) => (
+      {studentsToShow?.map((student, index) => (
         
         <TableRow hover  >
         
@@ -176,6 +201,21 @@ const StudentInformation = () => {
         ))}
         </TableBody>
         </Table>
+        
+        
+        {/* Centered pagination controls */}
+        <div className="pagination-container">
+        <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+        <FontAwesomeIcon icon={faArrowLeft} />
+        </Button>
+        <span className="page-number">{currentPage}</span>
+        <Button
+        onClick={() => setCurrentPage(currentPage + 1)}
+        disabled={indexOfLastStudent >= students.length}
+        >
+        <FontAwesomeIcon icon={faArrowRight} />
+        </Button>
+        </div>
         
         </>
         );

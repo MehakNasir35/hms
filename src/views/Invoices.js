@@ -1,31 +1,59 @@
 import React,{useState} from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col, Button, Alert } from 'reactstrap';
 import { TextField,Table,TableRow,TableCell,TableBody,TableHead ,InputLabel,Select,FormControl,MenuItem} from '@material-ui/core'; // Import from @mui/material
 import { useBuildings } from '../hooks/building';
 import { useInvoices } from '../hooks/invoice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const Invoices = () => {
     
+    const [currentPage, setCurrentPage] = useState(1);
+    const invoicePerPage = 10; // Adjust this number as needed
+    
     const { data } = useBuildings()
     const buildings = data?.data
+    
+    const [error,setError]=useState(false)
     
     const [building,setBuilding]=useState()
     const [toDate,setToDate]=useState()
     const [fromDate,setFromDate]=useState()
     const [identity_number,setID]=useState()
-
+    
     const [invoice,setInvoices]=useState([])
-
+    
     const invoiceData=useInvoices()
-
+    
     const search =async ()=>{
-        const invoices = await invoiceData.mutateAsync({'branch_id':building,'from_date':fromDate,'to_date':toDate,identity_number})
-        // const invoices=invoiceData?.data?.invoices
-        setInvoices(invoices)
+        
+        try{
+            setError(false)
+            const invoices = await invoiceData.mutateAsync({'branch_id':building,'from_date':fromDate,'to_date':toDate,identity_number})
+            // const invoices=invoiceData?.data?.invoices
+            setInvoices(invoices)
+            setCurrentPage(1)
+        }catch(error){
+            setError(true)
+            console.error('Error fetching data:', error);
+        }
+        
+        
     }
+    
+    // Calculate the index range for the current page
+    const indexOfLastInvoice = currentPage * invoicePerPage;
+    const indexOfFirstInvoice = indexOfLastInvoice - invoicePerPage;
+    const invoicesToShow = invoice.slice(indexOfFirstInvoice, indexOfLastInvoice);
+    
+    // Pagination controls
+    const totalPages = Math.ceil(invoice.length / invoicePerPage);
     
     return (
         <>
+        
+        {error && <Alert color="danger">{invoiceData.error.response.data.error}</Alert>}
+        
         <Row className="pt-2">
         <h4>Invoices</h4>
         </Row>
@@ -137,62 +165,76 @@ const Invoices = () => {
             </TableRow>
             </TableHead>
             <TableBody>
-            {invoice?.map((invoice, index) => (
-
-            <TableRow hover  >
+            {invoicesToShow?.map((invoice, index) => (
+                
+                <TableRow hover  >
+                
+                <TableCell >
+                {invoice.invoice_id}
+                </TableCell>
+                <TableCell >
+                {invoice.student_name}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.identity_number}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.invoice_status_name}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.amount}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.monthly_fee}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.admission_fee}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.security_fee}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.extra_services_fee}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.balanced_amount}
+                
+                </TableCell>
+                <TableCell >
+                {invoice.created_at}
+                
+                </TableCell>
+                </TableRow>
+                ))}
+                
+                </TableBody>
+                </Table>
+                
+                {/* Centered pagination controls */}
+                <div className="pagination-container">
+                <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+                </Button>
+                <span className="page-number">{currentPage}</span>
+                <Button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={indexOfLastInvoice >= invoice.length}
+                >
+                <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+                </div>
+                
+                </>
+                );
+            };
             
-            <TableCell >
-            {invoice.invoice_id}
-            </TableCell>
-            <TableCell >
-           {invoice.student_name}
-
-            </TableCell>
-            <TableCell >
-            {invoice.identity_number}
-
-            </TableCell>
-            <TableCell >
-            {invoice.invoice_status_name}
-
-            </TableCell>
-            <TableCell >
-            {invoice.amount}
-
-            </TableCell>
-            <TableCell >
-            {invoice.monthly_fee}
-
-            </TableCell>
-            <TableCell >
-            {invoice.admission_fee}
-
-            </TableCell>
-            <TableCell >
-            {invoice.security_fee}
-
-            </TableCell>
-            <TableCell >
-            {invoice.extra_services_fee}
-
-            </TableCell>
-            <TableCell >
-            {invoice.balanced_amount}
-
-            </TableCell>
-            <TableCell >
-            {invoice.created_at}
-
-            </TableCell>
-            </TableRow>
-            ))}
-
-            </TableBody>
-            </Table>
+            export default Invoices;
             
-            </>
-            );
-        };
-        
-        export default Invoices;
-        

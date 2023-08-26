@@ -1,11 +1,16 @@
 import React,{useState} from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col, Button, Alert } from 'reactstrap';
 import { TextField,Table,TableRow,TableCell,TableBody,TableHead ,InputLabel,Select,FormControl,MenuItem} from '@material-ui/core'; // Import from @mui/material
 import { useBuildings } from '../hooks/building';
 import { useExpenses } from '../hooks/expenses';
 import { AddExpense } from '../components/modals/AddExpense';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const Expenses = () => {
+    
+    const [currentPage, setCurrentPage] = useState(1);
+    const expensesPerPage = 10; // Adjust this number as needed
     
     const { data } = useBuildings()
     const buildings = data?.data
@@ -15,17 +20,37 @@ const Expenses = () => {
     const [toDate,setToDate]=useState()
     const [fromDate,setFromDate]=useState()
     const [expense,setExpenses]=useState([])
-
+    const [error,setError]=useState(false)
+    
     const expenseData=useExpenses()
     
     const search =async ()=>{
-        const expenses = await expenseData.mutateAsync({'branch_id':building,'from_date':fromDate,'to_date':toDate})
-        // const expenses=expenseData?.data?.data
-        setExpenses(expenses)
+        try{
+            setError(false)
+            const expenses = await expenseData.mutateAsync({'branch_id':building,'from_date':fromDate,'to_date':toDate})
+            // const expenses=expenseData?.data?.data
+            setExpenses(expenses)
+            setCurrentPage(1)
+        }catch(error){
+            setError(true)
+            console.error('Error fetching data:', error);
+        }
+        
     }
+    
+    
+    // Calculate the index range for the current page
+    const indexOfLastExpense = currentPage * expensesPerPage;
+    const indexOfFirstExpense = indexOfLastExpense - expensesPerPage;
+    const expensesToShow = expense.slice(indexOfFirstExpense, indexOfLastExpense);
+    
+    // Pagination controls
+    const totalPages = Math.ceil(expense.length / expensesPerPage);
     
     return (
         <>
+        
+        {error && <Alert color="danger">{expenseData.error.response.data.error}</Alert>}
         <Row className="pt-2">
         <Col>
         <h4>Expenses</h4>
@@ -109,7 +134,7 @@ const Expenses = () => {
             </TableRow>
             </TableHead>
             <TableBody>
-            {expense?.map((expense, index) => (
+            {expensesToShow?.map((expense, index) => (
                 
                 <TableRow hover  >
                 
@@ -118,20 +143,35 @@ const Expenses = () => {
                 </TableCell>
                 <TableCell >
                 {expense.expense_type_name}
-
+                
                 </TableCell>
                 <TableCell >
                 {expense.charges}
-
+                
                 </TableCell>
                 <TableCell >
                 {expense.expense_detail}
-
+                
                 </TableCell>
                 </TableRow>
                 ))}
                 </TableBody>
                 </Table>
+                
+                
+                {/* Centered pagination controls */}
+                <div className="pagination-container">
+                <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+                </Button>
+                <span className="page-number">{currentPage}</span>
+                <Button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={indexOfLastExpense >= expense.length}
+                >
+                <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+                </div>
                 
                 </>
                 );
