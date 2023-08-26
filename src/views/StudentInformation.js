@@ -11,7 +11,11 @@ import { updateLocationInfo, updatePersonalInfo, updateStudentId } from '../comp
 import { useNavigate } from 'react-router-dom';
 
 const StudentInformation = () => {
-
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 15; // Number of items to display per page
+  
   const navigate= useNavigate()
   
   const dispatch = useDispatch();
@@ -24,35 +28,50 @@ const StudentInformation = () => {
   const [students,setStudents]=useState([])
   
   const list = useStudents()
-  
-  const search =async () =>{
+  const nextFunction = async () => {
+    const nextPage = currentPage + 1;
+    console.log(currentPage)
+    setCurrentPage(nextPage); // Update currentPage state
+    console.log(currentPage)
+
+    search(); // Call search function when clicking "Next"
+    console.log(currentPage)
+  };
+  const search = async () => {
     try {
-      const data = await list.mutateAsync({'branch_id':building,'identity_number':cnic,status});
+      const response = await list.mutateAsync({
+        branch_id: building,
+        identity_number: cnic,
+        status,
+        page: currentPage - 1, // Adjust page index for API (starts from 0)
+        size: itemsPerPage,
+      });
       
-      setStudents(data);
+      setStudents(response.students); // Set the students array
+      setTotalPages(Math.ceil(response.total_count / itemsPerPage)); // Calculate total pages
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }
+  };
   
   const Edit=(student)=>{
-  
+    
     dispatch(updateStudentId(student.student_id));
-
+    
     dispatch(updateLocationInfo(student.location_info));
-
+    
     const personal_info ={
       student_name:student.student_name,
       identity_number:student.identity_number,
       primary_contact:student.primary_contact,
       designation:student.designation,
       emergency_contact_number:student.emergency_contact
-  }
-
-  dispatch(updatePersonalInfo(personal_info));
-
+    }
+    
+    dispatch(updatePersonalInfo(personal_info));
+    
     navigate('/home/registration')
-
+    
   }
   
   return (
@@ -176,10 +195,52 @@ const StudentInformation = () => {
         ))}
         </TableBody>
         </Table>
+
+        on page {currentPage}
+        <div>
+        <button
+        onClick={() => {
+          if (currentPage > 1) {
+            
+            setCurrentPage(currentPage - 1);
+            search(); // Call search function when clicking "Previous"
+          }
+        }}
+        disabled={currentPage === 1}
+        >
+        Previous
+        </button>
+        <span>{currentPage} / {totalPages}</span>
+        <button
+        onClick={() => {
+          if (currentPage < totalPages) {
+         nextFunction()
+          }
+        }}
+        disabled={currentPage === totalPages}
+        >
+        Next
+        </button>
+        </div>
         
-        </>
-        );
-      };
-      
-      export default StudentInformation;
-      
+        <div>
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+          key={index}
+          onClick={() => {
+            setCurrentPage(index + 1);
+            search(); // Call the search function when clicking a page button
+          }}
+          className={currentPage === index + 1 ? 'active' : ''}
+          >
+          {index + 1}
+          </button>
+          ))}
+          </div>
+          
+          </>
+          );
+        };
+        
+        export default StudentInformation;
+        
