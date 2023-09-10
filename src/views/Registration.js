@@ -57,14 +57,6 @@ const Registration = () => {
   };
   
   
-  let modifiedSteps = [...steps]; // Create a copy of the original steps array
-  
-  if (editStudent) {
-    // If editStudent has a value, keep only the first two steps
-    modifiedSteps = modifiedSteps.slice(0, 2);
-    steps = modifiedSteps
-  }
-  
   const locationInfo = useSelector((state) => state.reducers1.location_info);
   
   const personalInfo = useSelector((state) => state.reducers1.personal_info);

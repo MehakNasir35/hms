@@ -115,7 +115,7 @@ const PersonalInfo = () => {
     </Card>
     
     
-    {!editStudent && (<Card
+    <Card
       className="m-4 "
       >
       <CardHeader tag="h4" className="p-4">
@@ -128,6 +128,7 @@ const PersonalInfo = () => {
       <Col sm={6} lg={6} md={6} xs={6}>
       <TextField
       label="Guardian Name"
+      disabled={editStudent}
       id="outlined-start-adornment"
       className='m-2 w-100'
       value={guardianInfo.guardian_name}
@@ -138,6 +139,7 @@ const PersonalInfo = () => {
       <Col sm={6} lg={6} md={6} xs={6}>
       <TextField
       label="Guardian Relation"
+      disabled={editStudent}
       id="outlined-start-adornment"
       className='m-2 w-100'
       variant="outlined"
@@ -151,6 +153,7 @@ const PersonalInfo = () => {
       <Col sm={6} lg={6} md={6} xs={6}>
       <TextField
       label="Guardian CNIC"
+      disabled={editStudent}
       id="outlined-start-adornment"
       className='m-2 w-100'
       value={guardianInfo.guardian_identity_number}
@@ -163,6 +166,7 @@ const PersonalInfo = () => {
       label="Guardian Contact No."
       id="outlined-start-adornment"
       className='m-2 w-100'
+      disabled={editStudent}
       value={guardianInfo.guardian_primary_contact}
       variant="outlined"
       onChange={(e) => handleGuardianInfoChange('guardian_primary_contact', e.target.value)}
@@ -173,7 +177,7 @@ const PersonalInfo = () => {
       
       </CardTitle>
       </CardBody>
-      </Card>)}
+      </Card>
       
       
       

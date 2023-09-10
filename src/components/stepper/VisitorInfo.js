@@ -7,8 +7,7 @@ import { AddVisitor } from '../modals/AddVisitor';
 
 const VisitorInfo = () => {
     const visitorInfo = useSelector((state) => state.reducers1.visitors_info);
-    console.log("visitor",visitorInfo)
-    
+    const editStudent = useSelector((state) => state.reducers1.student_id);    
     return(
         <>
         
@@ -17,7 +16,9 @@ const VisitorInfo = () => {
         <h4>Visitor Information</h4>
         </Col>
         <Col>
-        <AddVisitor />
+
+        {editStudent ?  "" : <AddVisitor /> }
+        
         </Col>
         </Row>
         
@@ -39,29 +40,29 @@ const VisitorInfo = () => {
         </TableRow>
         </TableHead>
         <TableBody>
-
+        
         {visitorInfo?.map((visitor, index) => (
-        <TableRow hover  >
-        <TableCell >
-        {visitor.visitor_name}
-        </TableCell>
-        <TableCell >
-        {visitor.visitor_relation}
-        </TableCell>
-        <TableCell >
-        {visitor.visitor_identity_number}
-        </TableCell>
-        <TableCell >
-        {visitor.visitor_primary_contact}
-        </TableCell>
-        </TableRow>
-        ))}
-
-        </TableBody>
-        </Table>
-        </>
-        ) 
-    }
-    
-    export default VisitorInfo;
-    
+            <TableRow hover  >
+            <TableCell >
+            {visitor.visitor_name}
+            </TableCell>
+            <TableCell >
+            {visitor.visitor_relation}
+            </TableCell>
+            <TableCell >
+            {visitor.visitor_identity_number}
+            </TableCell>
+            <TableCell >
+            {visitor.visitor_primary_contact}
+            </TableCell>
+            </TableRow>
+            ))}
+            
+            </TableBody>
+            </Table>
+            </>
+            ) 
+        }
+        
+        export default VisitorInfo;
+        

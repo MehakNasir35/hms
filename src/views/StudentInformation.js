@@ -7,7 +7,7 @@ import { useBuildings } from '../hooks/building';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare , faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
-import { updateLocationInfo, updatePersonalInfo, updateStudentId } from '../components/stepper/reducer/actions';
+import { updateCnicBack, updateCnicFront, updateGuardianInfo, updateLocationInfo, updatePersonalInfo, updateStudentId, updateVisitorArray, updateVisitorInfo } from '../components/stepper/reducer/actions';
 import { useNavigate } from 'react-router-dom';
 
 const StudentInformation = () => {
@@ -54,6 +54,17 @@ const StudentInformation = () => {
     dispatch(updateStudentId(student.student_id));
     
     dispatch(updateLocationInfo(student.location_info));
+
+    dispatch(updateGuardianInfo(student.guardian_info));
+
+    dispatch(updateVisitorArray(student.visitors_info));
+
+    console.log(student.visitors_info)
+
+    dispatch(updateCnicBack(student.identity_images_info.id_image_back));
+    dispatch(updateCnicFront(student.identity_images_info.id_image_front));
+
+    console.log('student',student)
     
     const personal_info ={
       student_name:student.student_name,
@@ -62,6 +73,8 @@ const StudentInformation = () => {
       designation:student.designation,
       emergency_contact_number:student.emergency_contact
     }
+
+
     
     dispatch(updatePersonalInfo(personal_info));
     
