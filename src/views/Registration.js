@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stepper, Step, StepLabel, Button } from "@material-ui/core";
+import { Stepper, Step, StepLabel, Button, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import LocationInfo from "../components/stepper/LocationInfo";
@@ -10,12 +10,12 @@ import Cnic from "../components/stepper/Cnic";
 import { faLocationDot, faUser, faUserPen, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from "react-redux";
 import { useAddStudent, useUpdateStudent } from "../hooks/student";
-import { Alert } from "reactstrap";
+import { Alert, Col, Row } from "reactstrap";
 import { resetState } from "../components/stepper/reducer/actions";
 
 
 const Registration = () => {
-
+  
   const dispatch = useDispatch()
   
   const register = useAddStudent()
@@ -31,9 +31,11 @@ const Registration = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   
+  const reducer = useSelector((state) => state.reducers1);
+  console.log(reducer)
   const editStudent = useSelector((state) => state.reducers1.student_id);
-  console.log('edit student',editStudent)
-  
+  const status = useSelector((state) => state.reducers1.student_status);
+  console.log(status)
   let steps = [
     { label: 'Location Info', icon: faLocationDot },
     { label: 'Personal Info', icon: faUser },
@@ -83,15 +85,13 @@ const Registration = () => {
       const uStudent = await updateStudent.mutateAsync({'location_info':locationInfo,personal_info,'student_id':editStudent});
       if (uStudent) {
         dispatch(resetState());
-
+        
         // Reset the form or perform any other actions
         setActiveStep(0);
-
+        
       } else {
-        console.log("Something went wrong during the mutation");
       }
     } catch (error) {
-      console.error("An error occurred during the mutation:", error);
       // Handle the error, show an error message, etc.
     }
   }
@@ -113,18 +113,16 @@ const Registration = () => {
       }
       
       const add = await register.mutateAsync(formData);
-
+      
       
       if (add) {
         // Reset the form or perform any other actions
         setActiveStep(0);
         dispatch(resetState());
-
+        
       } else {
-        console.log("Something went wrong during the mutation");
       }
     } catch (error) {
-      console.error("An error occurred during the mutation:", error);
       // Handle the error, show an error message, etc.
     }
     
@@ -133,6 +131,35 @@ const Registration = () => {
   return (
     
     <div > {/* Wrap the content in a container */}
+    
+    
+    <Row className="pt-2">
+    <Col>
+    <h4>Registration</h4>
+    </Col>
+    <Col>
+    
+    {(activeStep == 0 && editStudent) ? <FormControl
+    variant="outlined"
+    className='w-25 float-end my-2  '>
+    <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
+    <Select
+    value={status}
+    labelId="demo-simple-select-outlined-label"
+    id="demo-simple-select-outlined"
+    >
+    <MenuItem value={1}>Joined</MenuItem>
+    <MenuItem value={2}>Active</MenuItem>
+    <MenuItem value={3}>Left</MenuItem>
+    </Select>
+    </FormControl> : ''}
+    
+    
+    </Col>
+    </Row>
+    
+    
+    
     <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
     
     {steps.map((step, index) => (

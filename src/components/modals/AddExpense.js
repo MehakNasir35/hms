@@ -69,6 +69,7 @@ export function AddExpense() {
         <>
         
         <Button className="float-end my-2  themeButtons"  onClick={handleOpen}>Add Expense +</Button>
+        
         <Modal
         open={modalOpen}
         onClose={handleClose}

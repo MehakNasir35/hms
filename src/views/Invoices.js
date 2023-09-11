@@ -35,7 +35,6 @@ const Invoices = () => {
             setCurrentPage(1)
         }catch(error){
             setError(true)
-            console.error('Error fetching data:', error);
         }
         
         

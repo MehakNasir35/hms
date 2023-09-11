@@ -7,10 +7,12 @@ import { UPDATE_CNIC_BACK } from './actionTypes';
 import { UPDATE_STUDENT_ID } from './actionTypes';
 import { UPDATE_VISITOR_ARRAY } from './actionTypes';
 import { RESET_STATE } from './actionTypes';
+import { UPDATE_STATUS } from './actionTypes';
 
 
 const initialState = {
     student_id:0,
+    student_status:'',
     location_info: {
         branch_id:'',
         floor_id:'',
@@ -42,6 +44,11 @@ export default function reducer1(state = initialState, action) {
         return {
             ...state,
             student_id: action.payload
+        };
+        case UPDATE_STATUS:
+        return {
+            ...state,
+            student_status: action.payload
         };
         case UPDATE_LOCATION_INFO:
         return {

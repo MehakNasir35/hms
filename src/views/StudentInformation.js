@@ -6,8 +6,8 @@ import { useStudents } from '../hooks/student';
 import { useBuildings } from '../hooks/building';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare , faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch } from 'react-redux';
-import { updateCnicBack, updateCnicFront, updateGuardianInfo, updateLocationInfo, updatePersonalInfo, updateStudentId, updateVisitorArray, updateVisitorInfo } from '../components/stepper/reducer/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCnicBack, updateCnicFront, updateGuardianInfo, updateLocationInfo, updatePersonalInfo, updateStatus, updateStudentId, updateVisitorArray } from '../components/stepper/reducer/actions';
 import { useNavigate } from 'react-router-dom';
 
 const StudentInformation = () => {
@@ -45,13 +45,21 @@ const StudentInformation = () => {
       
     } catch (error) {
       setError(true)
-      console.error('Error fetching data:', error);
     }
   };
   
   const Edit=(student)=>{
-    
+
+    let status_value = 3
+
     dispatch(updateStudentId(student.student_id));
+
+    if(student.student_status == 'Joined')
+    status_value = 1
+    else if(student.student_status == 'Active')
+    status_value = 2
+
+    dispatch(updateStatus(status_value));
     
     dispatch(updateLocationInfo(student.location_info));
 
@@ -59,13 +67,9 @@ const StudentInformation = () => {
 
     dispatch(updateVisitorArray(student.visitors_info));
 
-    console.log(student.visitors_info)
-
     dispatch(updateCnicBack(student.identity_images_info.id_image_back));
     dispatch(updateCnicFront(student.identity_images_info.id_image_front));
 
-    console.log('student',student)
-    
     const personal_info ={
       student_name:student.student_name,
       identity_number:student.identity_number,
@@ -74,9 +78,9 @@ const StudentInformation = () => {
       emergency_contact_number:student.emergency_contact
     }
 
-
-    
     dispatch(updatePersonalInfo(personal_info));
+
+   
     
     navigate('/home/registration')
     

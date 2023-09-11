@@ -52,7 +52,6 @@ const Starter = () => {
         setError(null);
       }
     } catch (error) {
-      console.error('API call error:', error);
       setError('An error occurred while fetching data.');
     }
   };
