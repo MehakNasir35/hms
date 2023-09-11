@@ -9,19 +9,24 @@ import Cnic from "../components/stepper/Cnic";
 
 import { faLocationDot, faUser, faUserPen, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from "react-redux";
-import { useAddStudent, useUpdateStudent } from "../hooks/student";
+import { useAddStudent, useUpdateStudent ,useUpdateStudentStatus} from "../hooks/student";
 import { Alert, Col, Row } from "reactstrap";
 import { resetState } from "../components/stepper/reducer/actions";
 
 
 const Registration = () => {
   
+  const editStudent = useSelector((state) => state.reducers1.student_id);
+  const status = useSelector((state) => state.reducers1.student_status);
+  
   const dispatch = useDispatch()
   
   const register = useAddStudent()
   const updateStudent = useUpdateStudent()
+  const updateStudentStatus = useUpdateStudentStatus()
   
   const [activeStep, setActiveStep] = useState(0);
+  const [studentStatus, setStudentStatus] = useState(status);
   
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -31,11 +36,6 @@ const Registration = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   
-  const reducer = useSelector((state) => state.reducers1);
-  console.log(reducer)
-  const editStudent = useSelector((state) => state.reducers1.student_id);
-  const status = useSelector((state) => state.reducers1.student_status);
-  console.log(status)
   let steps = [
     { label: 'Location Info', icon: faLocationDot },
     { label: 'Personal Info', icon: faUser },
@@ -128,6 +128,12 @@ const Registration = () => {
     
   }
   
+  const changeStatus = async(status) =>{
+    setStudentStatus(status)
+
+    const uStudent = await updateStudentStatus.mutateAsync({'student_id':editStudent,'status_id':status})
+  }
+  
   return (
     
     <div > {/* Wrap the content in a container */}
@@ -140,69 +146,70 @@ const Registration = () => {
     <Col>
     
     {(activeStep == 0 && editStudent) ? <FormControl
-    variant="outlined"
-    className='w-25 float-end my-2  '>
-    <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
-    <Select
-    value={status}
-    labelId="demo-simple-select-outlined-label"
-    id="demo-simple-select-outlined"
-    >
-    <MenuItem value={1}>Joined</MenuItem>
-    <MenuItem value={2}>Active</MenuItem>
-    <MenuItem value={3}>Left</MenuItem>
-    </Select>
-    </FormControl> : ''}
-    
-    
-    </Col>
-    </Row>
-    
-    
-    
-    <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
-    
-    {steps.map((step, index) => (
-      <Step key={step.label}>
-      <StepLabel icon={
-        <div className="circle-icon">
-        <FontAwesomeIcon icon={step.icon} className="stepperIcon" />
-        </div>
-      }>{step.label}</StepLabel>
-      </Step>
-      ))}
-      </Stepper>
-      <div className="step-content">
+      variant="outlined"
+      className='w-25 float-end my-2  '>
+      <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
+      <Select
+      onChange={(e)=>changeStatus(e.target.value)}
+      value={studentStatus}
+      labelId="demo-simple-select-outlined-label"
+      id="demo-simple-select-outlined"
+      >
+      <MenuItem value={1}>Joined</MenuItem>
+      <MenuItem value={2}>Active</MenuItem>
+      <MenuItem value={3}>Left</MenuItem>
+      </Select>
+      </FormControl> : ''}
       
-      {register.isError && <Alert color='danger' className='my-4'>Error: {register.error.response.data.error}</Alert>}
       
-      {getStepContent(activeStep)}
-      <div className="step-buttons float-end">
-      
-      {activeStep > 0 ?  <Button className="my-3 themeButtons" variant="contained" color="primary" onClick={handleBack}>
-      Back  </Button> : ' '} 
-      
-      {activeStep >= steps.length-1 ? ' ' : <Button className="m-3 themeButtons" variant="contained" color="primary" onClick={handleNext}>
-      Next  </Button>} 
+      </Col>
+      </Row>
       
       
       
-      {activeStep === steps.length - 1 && (
-        <Button
-        className="m-3 themeButtons"
-        variant="contained"
-        color="primary"
-        onClick={editStudent ? update :submit}
-        >
-        {editStudent ? 'Update' : 'Submit'}
-        </Button>
-        )}
+      <Stepper className="Stepper" activeStep={activeStep} alternativeLabel>
+      
+      {steps.map((step, index) => (
+        <Step key={step.label}>
+        <StepLabel icon={
+          <div className="circle-icon">
+          <FontAwesomeIcon icon={step.icon} className="stepperIcon" />
+          </div>
+        }>{step.label}</StepLabel>
+        </Step>
+        ))}
+        </Stepper>
+        <div className="step-content">
         
-        </div>
-        </div>
-        </div>
-        );
-      }
-      
-      export default Registration;
-      
+        {register.isError && <Alert color='danger' className='my-4'>Error: {register.error.response.data.error}</Alert>}
+        
+        {getStepContent(activeStep)}
+        <div className="step-buttons float-end">
+        
+        {activeStep > 0 ?  <Button className="my-3 themeButtons" variant="contained" color="primary" onClick={handleBack}>
+        Back  </Button> : ' '} 
+        
+        {activeStep >= steps.length-1 ? ' ' : <Button className="m-3 themeButtons" variant="contained" color="primary" onClick={handleNext}>
+        Next  </Button>} 
+        
+        
+        
+        {activeStep === steps.length - 1 && (
+          <Button
+          className="m-3 themeButtons"
+          variant="contained"
+          color="primary"
+          onClick={editStudent ? update :submit}
+          >
+          {editStudent ? 'Update' : 'Submit'}
+          </Button>
+          )}
+          
+          </div>
+          </div>
+          </div>
+          );
+        }
+        
+        export default Registration;
+        

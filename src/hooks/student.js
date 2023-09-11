@@ -70,3 +70,19 @@ export const useUpdateStudent = () => {
     }
 })
 }
+
+//update Student status
+export const useUpdateStudentStatus = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (data) => {
+            return axios
+            .put(`http://115.186.185.235:9011/hms/students/status/`, data,{ headers: {
+                'Content-Type': 'application/json'
+        }})
+        .then((res) => res.data)
+    }, onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['students'] })
+    }
+})
+}
